@@ -1,146 +1,94 @@
 import { useState } from 'react'
 import {
-  ArrowRight,
-  BarChart3,
-  Check,
-  ChevronRight,
-  CircleHelp,
-  CreditCard,
-  Headphones,
-  Menu,
-  Monitor,
-  Package,
-  ReceiptText,
-  ShieldCheck,
-  Sparkles,
-  X,
-  Zap,
+  ArrowRight, BarChart3, Check, ChevronRight, CircleHelp, CreditCard,
+  Headphones, Menu, Monitor, Package, ReceiptText, ShieldCheck, Sparkles, X, Zap,
 } from 'lucide-react'
 
 const solutions = [
-  {
-    eyebrow: 'GESTÃO EMPRESARIAL',
-    title: 'SGCI',
-    description: 'Uma visão completa da operação para você vender, controlar e decidir melhor.',
-    features: ['Vendas e PDV', 'Estoque inteligente', 'Financeiro integrado', 'Relatórios gerenciais'],
-    icon: BarChart3,
-    featured: true,
-  },
-  {
-    eyebrow: 'GESTÃO DE TRÂNSITO',
-    title: 'SISTRANS',
-    description: 'Tecnologia para organizar processos, informações e rotinas de trânsito.',
-    features: ['Gestão de processos', 'Controle operacional', 'Informação centralizada'],
-    icon: ReceiptText,
-    featured: false,
-  },
-  {
-    eyebrow: 'SEGURANÇA DIGITAL',
-    title: 'Certificação Digital',
-    description: 'Identidade digital com segurança para assinar, acessar e realizar operações.',
-    features: ['Emissão de certificados', 'Atendimento especializado', 'Segurança jurídica'],
-    icon: ShieldCheck,
-    featured: false,
-  },
+  { tag: 'GESTÃO EMPRESARIAL', title: 'SGCI', text: 'Gestão comercial completa para varejo, atacado, farmácias, postos e serviços.', icon: BarChart3, featured: true, items: ['Financeiro e fluxo de caixa', 'Estoque em tempo real', 'PDV integrado', 'Relatórios gerenciais'] },
+  { tag: 'GESTÃO DE TRÂNSITO', title: 'SISTRANS', text: 'Processos e informações de trânsito organizados em uma única plataforma.', icon: ReceiptText, items: ['Autuações e processos', 'Controle operacional', 'Integração com órgãos'] },
+  { tag: 'SEGURANÇA DIGITAL', title: 'Certificação Digital', text: 'Identidade digital para assinar documentos e realizar operações com segurança.', icon: ShieldCheck, items: ['Emissão e renovação', 'Atendimento especializado', 'Validade jurídica'] },
 ]
 
 const products = [
-  { icon: Monitor, label: 'Computadores', detail: 'Estações completas' },
-  { icon: CreditCard, label: 'PDV', detail: 'Frente de caixa' },
-  { icon: Package, label: 'Periféricos', detail: 'Leitores e acessórios' },
-  { icon: ReceiptText, label: 'Impressoras', detail: 'Impressão térmica' },
+  { icon: Monitor, name: 'Computadores', desc: 'Estações completas' },
+  { icon: CreditCard, name: 'PDV', desc: 'Frente de caixa' },
+  { icon: Package, name: 'Periféricos', desc: 'Leitores e acessórios' },
+  { icon: ReceiptText, name: 'Impressoras', desc: 'Impressão térmica' },
 ]
 
+function Logo() {
+  return <a href="#inicio" className="flex items-center gap-3" aria-label="Rede Software">
+    <span className="grid size-10 place-items-center rounded-xl bg-[#101114] text-xl font-extrabold text-white shadow-lg shadow-black/10">R</span>
+    <span className="font-display text-[15px] font-extrabold tracking-[-.04em]">REDE<span className="block text-[9px] font-bold tracking-[.28em] text-neutral-400">SOFTWARE</span></span>
+  </a>
+}
+
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const close = () => setOpen(false)
 
-  const closeMenu = () => setMenuOpen(false)
-
-  return (
-    <div className="site-shell">
-      <header className="header">
-        <a className="brand" href="#inicio" onClick={closeMenu} aria-label="Rede Software">
-          <span className="brand-mark">R</span>
-          <span>REDE<span>SOFTWARE</span></span>
-        </a>
-
-        <nav className={`nav ${menuOpen ? 'nav-open' : ''}`}>
-          <a href="#solucoes" onClick={closeMenu}>Soluções</a>
-          <a href="#produtos" onClick={closeMenu}>Produtos</a>
-          <a href="#suporte" onClick={closeMenu}>Suporte</a>
-          <a href="#empresa" onClick={closeMenu}>Empresa</a>
-          <a className="nav-cta" href="#contato" onClick={closeMenu}>Fale conosco <ArrowRight size={16} /></a>
+  return <div className="min-h-screen overflow-hidden bg-white text-[#101114]">
+    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/85 backdrop-blur-xl">
+      <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 lg:px-8">
+        <Logo />
+        <nav className={`${open ? 'absolute left-4 right-4 top-[68px] flex flex-col rounded-2xl border border-black/5 bg-white p-3 shadow-2xl' : 'hidden'} gap-1 lg:static lg:flex lg:flex-row lg:items-center lg:gap-8 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none`}>
+          {['Soluções','Produtos','Suporte','Empresa'].map((item) => <a key={item} href={`#${item === 'Soluções' ? 'solucoes' : item === 'Produtos' ? 'produtos' : item === 'Suporte' ? 'suporte' : 'empresa'}`} onClick={close} className="rounded-xl px-3 py-3 text-sm font-semibold text-neutral-500 transition hover:text-[#e3262e] lg:px-0 lg:py-2">{item}</a>)}
+          <a href="#contato" onClick={close} className="flex items-center justify-center gap-2 rounded-xl bg-[#e3262e] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-red-600/20 transition hover:-translate-y-0.5 hover:bg-[#cf1f27]">Fale conosco <ArrowRight size={16}/></a>
         </nav>
+        <button className="rounded-xl p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label="Abrir menu">{open ? <X/> : <Menu/>}</button>
+      </div>
+    </header>
 
-        <button className="menu-button" onClick={() => setMenuOpen((value) => !value)} aria-label="Abrir menu">
-          {menuOpen ? <X /> : <Menu />}
-        </button>
-      </header>
-
-      <main>
-        <section className="hero" id="inicio">
-          <div className="hero-glow glow-one" />
-          <div className="hero-glow glow-two" />
-          <div className="hero-copy">
-            <div className="pill"><Sparkles size={14} /> Tecnologia que trabalha por você</div>
-            <h1>Gestão inteligente.<br /><em>Negócios mais fortes.</em></h1>
-            <p>Software, equipamentos e suporte para transformar a rotina da sua empresa em resultados.</p>
-            <div className="hero-actions">
-              <a className="button button-primary" href="#solucoes">Conheça nossas soluções <ArrowRight size={18} /></a>
-              <a className="button button-ghost" href="#contato">Falar com um especialista</a>
+    <main>
+      <section id="inicio" className="hero-grid relative isolate border-b border-black/5">
+        <div className="grid-pattern absolute inset-0 -z-10 opacity-40" />
+        <div className="red-glow absolute -right-40 top-10 -z-10 size-[520px]" />
+        <div className="mx-auto grid min-h-[720px] max-w-7xl items-center gap-14 px-5 py-20 lg:grid-cols-[.9fr_1.1fr] lg:px-8 lg:py-24">
+          <div>
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-red-100 bg-white px-3 py-2 text-xs font-bold text-[#cf1f27] shadow-sm"><Sparkles size={14}/> Tecnologia que trabalha por você</div>
+            <h1 className="font-display text-[clamp(3.1rem,6vw,6.1rem)] font-extrabold leading-[.94] tracking-[-.065em]">Gestão que<br/><span className="text-[#e3262e]">move negócios.</span></h1>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-neutral-500">Software, equipamentos e suporte para simplificar a operação e transformar informação em decisão.</p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a href="#solucoes" className="group flex items-center gap-3 rounded-xl bg-[#101114] px-5 py-4 text-sm font-bold text-white transition hover:-translate-y-0.5">Conheça nossas soluções <ArrowRight size={17} className="transition group-hover:translate-x-1"/></a>
+              <a href="#contato" className="rounded-xl border border-black/10 bg-white px-5 py-4 text-sm font-bold text-neutral-700 transition hover:border-red-200 hover:text-[#e3262e]">Falar com especialista</a>
             </div>
-            <div className="trust-line"><span className="dot" /> Tecnologia presente no dia a dia de empresas reais</div>
+            <div className="mt-9 flex items-center gap-3 text-xs font-medium text-neutral-400"><span className="size-2 rounded-full bg-emerald-500 shadow-[0_0_0_5px_rgba(16,185,129,.1)]"/> Tecnologia presente no dia a dia de empresas reais</div>
           </div>
 
-          <div className="dashboard-wrap" aria-label="Prévia do painel de gestão">
-            <div className="dashboard-backdrop" />
-            <div className="dashboard-card">
-              <div className="dashboard-top"><span className="window-dots"><i /><i /><i /></span><span>Visão geral</span><span className="live"><b /> online</span></div>
-              <div className="dashboard-body">
-                <div className="dashboard-title"><div><small>TERÇA, 18 AGO</small><strong>Olá, gestor.</strong></div><div className="avatar">RS</div></div>
-                <div className="metric-grid">
-                  <div className="metric"><span>Faturamento</span><strong>R$ 42.580</strong><small className="positive">↑ 18,4%</small></div>
-                  <div className="metric"><span>Vendas hoje</span><strong>286</strong><small>+32 que ontem</small></div>
-                  <div className="metric"><span>Estoque</span><strong>1.842</strong><small>itens ativos</small></div>
-                </div>
-                <div className="chart-card"><div className="chart-heading"><span>Vendas da semana</span><small>Últimos 7 dias</small></div><div className="chart"><i style={{ height: '35%' }} /><i style={{ height: '48%' }} /><i style={{ height: '42%' }} /><i style={{ height: '66%' }} /><i style={{ height: '58%' }} /><i style={{ height: '82%' }} /><i className="current" style={{ height: '94%' }} /></div><div className="chart-labels"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Hoje</span></div></div>
+          <div className="relative mx-auto w-full max-w-[650px] lg:pl-8">
+            <div className="absolute inset-10 rounded-full bg-red-100/60 blur-3xl"/>
+            <div className="dashboard-shadow relative overflow-hidden rounded-[24px] border border-black/10 bg-white">
+              <div className="flex h-12 items-center gap-3 border-b border-black/5 px-5 text-xs text-neutral-400"><span className="flex gap-1.5"><i className="size-1.5 rounded-full bg-neutral-200"/><i className="size-1.5 rounded-full bg-neutral-200"/><i className="size-1.5 rounded-full bg-neutral-200"/></span><span>SGCI · Visão geral</span><span className="ml-auto flex items-center gap-1.5 text-emerald-600"><i className="size-1.5 rounded-full bg-emerald-500"/> online</span></div>
+              <div className="p-5 sm:p-7">
+                <div className="flex items-center justify-between"><div><p className="text-[9px] font-bold tracking-[.18em] text-neutral-400">TERÇA, 18 AGO</p><h3 className="mt-1 font-display text-xl font-extrabold">Olá, gestor.</h3></div><span className="grid size-10 place-items-center rounded-xl bg-red-50 text-xs font-extrabold text-[#e3262e]">RS</span></div>
+                <div className="mt-6 grid grid-cols-3 gap-2"><div className="rounded-xl border border-black/5 p-3"><span className="text-[9px] text-neutral-400">Faturamento</span><b className="mt-2 block font-display text-sm">R$ 42.580</b><small className="text-[9px] font-bold text-emerald-600">↑ 18,4%</small></div><div className="rounded-xl border border-black/5 p-3"><span className="text-[9px] text-neutral-400">Vendas hoje</span><b className="mt-2 block font-display text-sm">286</b><small className="text-[9px] text-neutral-400">+32 que ontem</small></div><div className="rounded-xl border border-black/5 p-3"><span className="text-[9px] text-neutral-400">Estoque</span><b className="mt-2 block font-display text-sm">1.842</b><small className="text-[9px] text-neutral-400">itens ativos</small></div></div>
+                <div className="mt-3 rounded-xl border border-black/5 p-4"><div className="flex justify-between text-[10px] font-bold"><span>Vendas da semana</span><span className="font-normal text-neutral-400">Últimos 7 dias</span></div><div className="mt-5 flex h-28 items-end gap-2">{[35,48,42,66,58,82,94].map((h,i)=><span key={i} className={`flex-1 rounded-t-md ${i===6?'bg-[#e3262e]':'bg-red-100'}`} style={{height:`${h}%`}}/>)}</div><div className="mt-2 flex justify-between text-[8px] text-neutral-400"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Hoje</span></div></div>
               </div>
             </div>
-            <div className="floating-card floating-sales"><span className="floating-icon"><Zap size={16} /></span><div><small>Venda realizada</small><strong>+ R$ 1.280,00</strong></div></div>
-            <div className="floating-card floating-stock"><span className="check-icon"><Check size={15} /></span><div><small>Estoque sincronizado</small><strong>Tudo em dia</strong></div></div>
+            <div className="float absolute -right-2 top-16 hidden items-center gap-3 rounded-2xl border border-black/5 bg-white p-3 shadow-xl sm:flex"><span className="grid size-9 place-items-center rounded-xl bg-red-50 text-[#e3262e]"><Zap size={16}/></span><span><small className="block text-[9px] text-neutral-400">Venda realizada</small><b className="text-xs">+ R$ 1.280,00</b></span></div>
+            <div className="float-delay absolute -bottom-5 -left-3 hidden items-center gap-3 rounded-2xl border border-black/5 bg-white p-3 shadow-xl sm:flex"><span className="grid size-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><Check size={15}/></span><span><small className="block text-[9px] text-neutral-400">Estoque sincronizado</small><b className="text-xs">Tudo em dia</b></span></div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="stats">
-          <div><strong>+19</strong><span>anos de experiência</span></div>
-          <div><strong>360°</strong><span>visão da sua operação</span></div>
-          <div><strong>24/7</strong><span>dados ao seu alcance</span></div>
-          <div><strong>1</strong><span>parceiro para sua tecnologia</span></div>
-        </section>
+      <section className="border-b border-black/5 bg-white"><div className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-black/5 px-5 py-9 sm:grid-cols-4"><div className="px-5 first:pl-0"><b className="font-display text-3xl font-extrabold">+19</b><p className="mt-1 text-xs text-neutral-400">anos de experiência</p></div><div className="px-5"><b className="font-display text-3xl font-extrabold">360°</b><p className="mt-1 text-xs text-neutral-400">visão da operação</p></div><div className="border-t border-black/5 px-5 pt-5 sm:border-t-0 sm:border-l sm:pt-0"><b className="font-display text-3xl font-extrabold">7+</b><p className="mt-1 text-xs text-neutral-400">frentes de tecnologia</p></div><div className="border-t border-black/5 px-5 pt-5 sm:border-t-0 sm:border-l sm:pt-0"><b className="font-display text-3xl font-extrabold text-[#e3262e]">1</b><p className="mt-1 text-xs text-neutral-400">parceiro para sua tecnologia</p></div></div></section>
 
-        <section className="section solutions" id="solucoes">
-          <div className="section-heading"><div><span className="section-kicker">SOLUÇÕES</span><h2>Tudo conectado.<br /><span>Uma gestão sem ruído.</span></h2></div><p>Ferramentas pensadas para simplificar processos, centralizar informações e dar clareza para quem precisa tomar decisões.</p></div>
-          <div className="solution-grid">{solutions.map((solution) => { const Icon = solution.icon; return <article className={`solution-card ${solution.featured ? 'featured' : ''}`} key={solution.title}><div className="card-top"><span className="solution-icon"><Icon size={21} /></span><span className="arrow-circle"><ArrowRight size={17} /></span></div><span className="card-eyebrow">{solution.eyebrow}</span><h3>{solution.title}</h3><p>{solution.description}</p><ul>{solution.features.map((feature) => <li key={feature}><Check size={14} />{feature}</li>)}</ul><a href="#contato">Conhecer solução <ChevronRight size={15} /></a></article> })}</div>
-        </section>
+      <section id="solucoes" className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32"><div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end"><div><span className="text-[10px] font-extrabold tracking-[.24em] text-[#e3262e]">SOLUÇÕES</span><h2 className="mt-4 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-[-.05em] sm:text-5xl">Tecnologia para cada parte<br/><span className="text-neutral-400">do seu negócio.</span></h2></div><p className="max-w-md text-sm leading-7 text-neutral-500">A Rede Software reúne sistemas, serviços e conhecimento para deixar a operação mais simples, integrada e previsível.</p></div>
+        <div className="mt-12 grid gap-4 lg:grid-cols-[1.2fr_1fr_1fr]">{solutions.map(({tag,title,text,icon:Icon,items,featured})=><article key={title} className={`group min-h-[410px] rounded-3xl border p-7 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/5 ${featured?'border-[#101114] bg-[#101114] text-white':'border-black/7 bg-white'}`}><div className="flex justify-between"><span className={`grid size-11 place-items-center rounded-xl ${featured?'bg-white/10 text-red-400':'bg-red-50 text-[#e3262e]'}`}><Icon size={21}/></span><span className={`grid size-9 place-items-center rounded-full border ${featured?'border-white/10 text-white/60':'border-black/8 text-neutral-400'}`}><ArrowRight size={15}/></span></div><p className={`mt-14 text-[9px] font-extrabold tracking-[.18em] ${featured?'text-red-300':'text-neutral-400'}`}>{tag}</p><h3 className="mt-2 font-display text-3xl font-extrabold tracking-[-.04em]">{title}</h3><p className={`mt-3 max-w-sm text-xs leading-6 ${featured?'text-neutral-400':'text-neutral-500'}`}>{text}</p><ul className="mt-6 space-y-3">{items.map(item=><li key={item} className={`flex items-center gap-2 text-[10px] font-semibold ${featured?'text-neutral-300':'text-neutral-600'}`}><Check size={14} className="text-[#e3262e]"/>{item}</li>)}</ul><a href="#contato" className={`mt-8 flex items-center gap-1 text-xs font-extrabold ${featured?'text-white':'text-[#e3262e]'}`}>Conhecer solução <ChevronRight size={15}/></a></article>)}</div>
+      </section>
 
-        <section className="feature-section" id="empresa">
-          <div className="feature-visual"><div className="orbit orbit-a" /><div className="orbit orbit-b" /><div className="mini-window"><div className="mini-head"><span /> SGCI • Financeiro</div><div className="mini-row"><span>Contas a receber</span><strong>R$ 18.420,00</strong></div><div className="mini-bar"><i /></div><div className="mini-row"><span>Contas a pagar</span><strong>R$ 8.690,00</strong></div><div className="mini-bar second"><i /></div></div><div className="feature-badge"><ShieldCheck size={17} /><span>Dados protegidos<br /><strong>e centralizados</strong></span></div></div>
-          <div className="feature-copy"><span className="section-kicker">TECNOLOGIA COM PROPÓSITO</span><h2>Menos tempo apagando incêndios. <span>Mais tempo fazendo o negócio crescer.</span></h2><p>Uma boa tecnologia não deveria complicar sua rotina. Ela deve desaparecer no fundo e deixar o que importa em primeiro plano: seu negócio.</p><div className="feature-list"><div><b>01</b><span><strong>Controle de ponta a ponta</strong>Tenha uma visão clara de vendas, estoque e financeiro.</span></div><div><b>02</b><span><strong>Decisões baseadas em dados</strong>Transforme informações da operação em ação.</span></div><div><b>03</b><span><strong>Suporte que resolve</strong>Quando precisar, fale com gente de verdade.</span></div></div></div>
-        </section>
+      <section id="empresa" className="border-y border-black/5 bg-[#fafafa]"><div className="mx-auto grid max-w-7xl items-center gap-16 px-5 py-24 lg:grid-cols-2 lg:px-8 lg:py-32"><div className="relative min-h-[430px] overflow-hidden rounded-[32px] bg-[#101114] p-6"><div className="absolute -right-20 -top-20 size-80 rounded-full bg-red-600/20 blur-3xl"/><div className="absolute inset-10 rounded-full border border-white/5"/><div className="absolute inset-24 rounded-full border border-white/5"/><div className="relative mx-auto mt-12 max-w-sm rounded-2xl border border-white/10 bg-white p-5 shadow-2xl"><div className="flex items-center gap-2 border-b border-black/5 pb-4 text-[10px] font-bold"><span className="size-2 rounded-sm bg-[#e3262e]"/> SGCI · Financeiro</div><div className="mt-5 flex justify-between text-[10px] text-neutral-400"><span>Contas a receber</span><b className="text-neutral-800">R$ 18.420,00</b></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-red-50"><span className="block h-full w-3/4 rounded-full bg-[#e3262e]"/></div><div className="mt-6 flex justify-between text-[10px] text-neutral-400"><span>Contas a pagar</span><b className="text-neutral-800">R$ 8.690,00</b></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-neutral-100"><span className="block h-full w-1/2 rounded-full bg-neutral-300"/></div></div><div className="absolute bottom-7 right-7 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-[9px] text-white backdrop-blur"><ShieldCheck size={15} className="mb-1 text-red-400"/> Dados protegidos<br/><b>e centralizados</b></div></div><div><span className="text-[10px] font-extrabold tracking-[.24em] text-[#e3262e]">TECNOLOGIA COM PROPÓSITO</span><h2 className="mt-4 font-display text-4xl font-extrabold leading-tight tracking-[-.05em] sm:text-5xl">Menos tempo apagando incêndios.<br/><span className="text-neutral-400">Mais tempo fazendo o negócio crescer.</span></h2><p className="mt-6 text-sm leading-7 text-neutral-500">Uma boa tecnologia não deveria complicar sua rotina. Ela deve organizar o que está por trás e deixar o que importa em primeiro plano: seu negócio.</p><div className="mt-8 space-y-5">{[['01','Controle de ponta a ponta','Vendas, estoque e financeiro em uma visão clara.'],['02','Decisões baseadas em dados','Informação organizada para agir com segurança.'],['03','Suporte que resolve','Quando precisar, fale com gente de verdade.']].map(([n,t,d])=><div key={n} className="grid grid-cols-[28px_1fr] gap-4 border-b border-black/7 pb-5"><b className="text-[10px] text-neutral-300">{n}</b><span className="text-xs leading-5 text-neutral-500"><strong className="mb-1 block text-neutral-800">{t}</strong>{d}</span></div>)}</div></div></div></section>
 
-        <section className="section products" id="produtos">
-          <div className="section-heading"><div><span className="section-kicker">HARDWARE & PDV</span><h2>Do software ao <span>equipamento.</span></h2></div><p>A tecnologia certa precisa funcionar inteira. Por isso, conectamos sistemas, equipamentos e suporte em uma única experiência.</p></div>
-          <div className="product-grid">{products.map(({ icon: Icon, label, detail }) => <a href="#contato" className="product-card" key={label}><span className="product-icon"><Icon size={23} /></span><span><strong>{label}</strong><small>{detail}</small></span><ArrowRight size={18} /></a>)}</div>
-        </section>
+      <section id="produtos" className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32"><div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end"><div><span className="text-[10px] font-extrabold tracking-[.24em] text-[#e3262e]">HARDWARE & PDV</span><h2 className="mt-4 font-display text-4xl font-extrabold tracking-[-.05em] sm:text-5xl">Do software ao <span className="text-neutral-400">equipamento.</span></h2></div><p className="max-w-md text-sm leading-7 text-neutral-500">Computadores, MFE, monitores, leitores, impressoras térmicas e periféricos para completar sua operação.</p></div><div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{products.map(({icon:Icon,name,desc})=><a href="#contato" key={name} className="group flex items-center gap-4 rounded-2xl border border-black/7 p-5 transition hover:-translate-y-1 hover:border-red-100 hover:shadow-xl hover:shadow-red-900/5"><span className="grid size-11 place-items-center rounded-xl bg-neutral-50 text-neutral-500 transition group-hover:bg-red-50 group-hover:text-[#e3262e]"><Icon size={22}/></span><span className="flex-1"><b className="block text-sm">{name}</b><small className="text-[10px] text-neutral-400">{desc}</small></span><ArrowRight size={16} className="text-neutral-300 transition group-hover:translate-x-1 group-hover:text-[#e3262e]"/></a>)}</div></section>
 
-        <section className="support" id="suporte"><div className="support-inner"><div className="support-icon"><Headphones size={27} /></div><div><span className="section-kicker">SUPORTE HUMANIZADO</span><h2>Você fala com pessoas.<br /><span>Não com robôs.</span></h2><p>Quando seu negócio precisa de ajuda, a resposta não pode ficar presa em um menu. Conte com uma equipe que conhece sua operação e está pronta para resolver.</p><a className="button button-light" href="#contato">Falar com nosso suporte <ArrowRight size={18} /></a></div><div className="support-orbit" /></div></section>
+      <section id="suporte" className="bg-[#101114] text-white"><div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-24 lg:grid-cols-[80px_1fr] lg:px-8 lg:py-28"><div className="grid size-14 place-items-center rounded-2xl border border-white/10 bg-white/5 text-red-400"><Headphones size={25}/></div><div><span className="text-[10px] font-extrabold tracking-[.24em] text-red-400">SUPORTE HUMANIZADO</span><h2 className="mt-4 font-display text-4xl font-extrabold tracking-[-.05em] sm:text-5xl">Você fala com pessoas.<br/><span className="text-neutral-500">Não com robôs.</span></h2><p className="mt-5 max-w-2xl text-sm leading-7 text-neutral-400">Quando seu negócio precisa de ajuda, a resposta não pode ficar presa em um menu. Conte com uma equipe que conhece sua operação e está pronta para resolver.</p><a href="#contato" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-4 text-sm font-extrabold text-[#101114] transition hover:bg-red-50">Falar com nosso suporte <ArrowRight size={17}/></a></div></div></section>
 
-        <section className="contact" id="contato"><div><span className="section-kicker">VAMOS CONVERSAR</span><h2>Seu negócio merece<br /><span>uma tecnologia à altura.</span></h2></div><a className="contact-button" href="mailto:contato@redesoftware.com.br">Começar uma conversa <ArrowRight /></a></section>
-      </main>
+      <section id="contato" className="mx-auto flex max-w-7xl flex-col justify-between gap-10 px-5 py-24 lg:flex-row lg:items-end lg:px-8 lg:py-32"><div><span className="text-[10px] font-extrabold tracking-[.24em] text-[#e3262e]">VAMOS CONVERSAR</span><h2 className="mt-4 font-display text-5xl font-extrabold leading-tight tracking-[-.06em] sm:text-6xl">Seu negócio merece<br/><span className="text-neutral-400">uma tecnologia à altura.</span></h2></div><a href="mailto:contato@redesoftware.com.br" className="group inline-flex w-fit items-center gap-5 rounded-2xl bg-[#e3262e] px-6 py-5 text-sm font-extrabold text-white shadow-xl shadow-red-600/20 transition hover:-translate-y-1 hover:bg-[#cf1f27]">Começar uma conversa <ArrowRight size={19} className="transition group-hover:translate-x-1"/></a></section>
+    </main>
 
-      <footer><div className="footer-main"><a className="brand footer-brand" href="#inicio"><span className="brand-mark">R</span><span>REDE<span>SOFTWARE</span></span></a><p>Tecnologia que simplifica a gestão<br />e aproxima resultados.</p><div className="footer-links"><a href="#solucoes">Soluções</a><a href="#produtos">Produtos</a><a href="#suporte">Suporte</a><a href="#empresa">Empresa</a></div><a className="help" href="#contato"><CircleHelp size={17} /> Precisa de ajuda?</a></div><div className="footer-bottom"><span>© 2026 Rede Software. Todos os direitos reservados.</span><span>Feito para negócios que querem evoluir.</span></div></footer>
-    </div>
-  )
+    <footer className="border-t border-black/5"><div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 lg:grid-cols-[1.4fr_1fr_1fr_.7fr] lg:px-8"><div><Logo/><p className="mt-4 text-xs leading-6 text-neutral-400">Tecnologia que simplifica a gestão<br/>e aproxima resultados.</p></div><div className="grid gap-3 text-xs text-neutral-500"><a href="#solucoes">Soluções</a><a href="#produtos">Produtos</a><a href="#suporte">Suporte</a><a href="#empresa">Empresa</a></div><div className="text-xs text-neutral-400"><p className="font-bold text-neutral-700">Rede Software</p><p className="mt-2 leading-5">Tecnologia, sistemas e suporte para negócios.</p></div><a href="#contato" className="flex h-fit items-center gap-2 text-xs font-bold text-[#e3262e]"><CircleHelp size={16}/> Precisa de ajuda?</a></div><div className="mx-auto flex max-w-7xl flex-col justify-between gap-2 border-t border-black/5 px-5 py-5 text-[9px] text-neutral-400 sm:flex-row lg:px-8"><span>© 2026 Rede Software. Todos os direitos reservados.</span><span>Feito para negócios que querem evoluir.</span></div></footer>
+  </div>
 }
 
 export default App
