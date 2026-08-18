@@ -8,6 +8,7 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  CircleDollarSign,
   CircleHelp,
   CircleUserRound,
   CreditCard,
