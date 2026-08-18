@@ -1,9 +1,27 @@
 {
   "name": "rede-software",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
-  "scripts": {"dev":"vite","build":"tsc -b && vite build","preview":"vite preview"},
-  "dependencies": {"@tailwindcss/vite":"latest","lucide-react":"latest","react":"latest","react-dom":"latest","react-router-dom":"latest","tailwindcss":"latest","vite":"latest"},
-  "devDependencies": {"@types/react":"latest","@types/react-dom":"latest","typescript":"latest"}
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest",
+    "tailwindcss": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/node": "latest",
+    "@vitejs/plugin-react": "latest",
+    "typescript": "latest"
+  }
 }
