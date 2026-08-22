@@ -29,8 +29,6 @@
   --content-max: 1280px;
   --radius-card: 24px;
   --radius-control: 12px;
-
-  /* Motion Design System — LottieFiles-inspired timing */
   --motion-micro: 120ms;
   --motion-button: 160ms;
   --motion-icon: 200ms;
@@ -61,212 +59,42 @@ img { max-width: 100%; }
 .dashboard-shadow { box-shadow: 0 30px 80px rgba(16,17,20,.11), 0 8px 24px rgba(16,17,20,.05); }
 .soft-shadow { box-shadow: 0 18px 52px rgba(16,17,20,.07); }
 
-/* Motion Design System: purpose-first, restrained corporate motion */
-main > section {
-  animation: page-section-enter var(--motion-page) var(--ease-motion-enter) both;
-}
+.scroll-reveal { opacity: 0; transform: translate3d(0, 32px, 0) scale(.985); transition: opacity var(--motion-page) var(--ease-motion-enter), transform var(--motion-page) var(--ease-motion-enter); transition-delay: var(--reveal-delay, 0ms); will-change: opacity, transform; }
+.scroll-reveal.is-visible { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 
-main > section:nth-child(1) { animation-delay: 40ms; }
-main > section:nth-child(2) { animation-delay: 90ms; }
-main > section:nth-child(3) { animation-delay: 140ms; }
-main > section:nth-child(4) { animation-delay: 190ms; }
-main > section:nth-child(5) { animation-delay: 240ms; }
-main > section:nth-child(6) { animation-delay: 290ms; }
+.interactive-surface, .interactive-card { transition: transform var(--motion-card) var(--ease-motion-standard), box-shadow var(--motion-card) var(--ease-motion-standard), border-color var(--motion-card) var(--ease-motion-standard), background-color var(--motion-card) var(--ease-motion-standard); will-change: transform, box-shadow; }
+.interactive-surface:hover, .interactive-card:hover { transform: translateY(-3px); box-shadow: 0 22px 58px rgba(16,17,20,.10); border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border)); }
+.interactive-card img { transition: transform 420ms var(--ease-motion-standard), filter 420ms var(--ease-motion-standard); will-change: transform; }
+.interactive-card:hover img { transform: scale(1.025); filter: saturate(1.03); }
 
-.interactive-surface,
-.interactive-card {
-  transition:
-    transform var(--motion-card) var(--ease-motion-standard),
-    box-shadow var(--motion-card) var(--ease-motion-standard),
-    border-color var(--motion-card) var(--ease-motion-standard),
-    background-color var(--motion-card) var(--ease-motion-standard);
-  will-change: transform, box-shadow;
-}
+.brand-cta { transition: background-color var(--motion-button) var(--ease-motion-standard), box-shadow var(--motion-button) var(--ease-motion-standard), transform var(--motion-button) var(--ease-motion-standard); will-change: transform; }
+.brand-cta:hover { background-color: var(--brand-primary-hover); box-shadow: 0 12px 30px rgba(227,38,46,.18); transform: translateY(-1px); }
+.brand-cta:active { background-color: var(--brand-primary-deep); transform: translateY(1px) scale(.985); box-shadow: 0 6px 16px rgba(227,38,46,.14); }
 
-.interactive-surface:hover,
-.interactive-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 22px 58px rgba(16,17,20,.10);
-  border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border));
-}
+.nav-link { position: relative; transition: color var(--motion-button) var(--ease-motion-standard); }
+.nav-link::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 5px; height: 2px; transform: scaleX(0); transform-origin: left; background: var(--brand-primary); transition: transform var(--motion-button) var(--ease-motion-standard); }
+.nav-link:hover::after, .nav-link[aria-current="page"]::after { transform: scaleX(1); }
 
-.interactive-card img {
-  transition: transform 420ms var(--ease-motion-standard), filter 420ms var(--ease-motion-standard);
-  will-change: transform;
-}
+.section-shell { position: relative; isolation: isolate; }
+.section-shell::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(circle at top right, rgba(227,38,46,.035), transparent 28%); }
+.metric-card { background: linear-gradient(145deg, #fff, var(--surface-soft)); border: 1px solid var(--border); border-radius: var(--radius-card); }
 
-.interactive-card:hover img {
-  transform: scale(1.025);
-  filter: saturate(1.03);
-}
-
-.brand-cta {
-  transition:
-    background-color var(--motion-button) var(--ease-motion-standard),
-    box-shadow var(--motion-button) var(--ease-motion-standard),
-    transform var(--motion-button) var(--ease-motion-standard);
-  will-change: transform;
-}
-
-.brand-cta:hover {
-  background-color: var(--brand-primary-hover);
-  box-shadow: 0 12px 30px rgba(227,38,46,.18);
-  transform: translateY(-1px);
-}
-
-.brand-cta:active {
-  background-color: var(--brand-primary-deep);
-  transform: translateY(1px) scale(.985);
-  box-shadow: 0 6px 16px rgba(227,38,46,.14);
-}
-
-.nav-link {
-  position: relative;
-  transition: color var(--motion-button) var(--ease-motion-standard);
-}
-
-.nav-link::after {
-  content: "";
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 5px;
-  height: 2px;
-  transform: scaleX(0);
-  transform-origin: left;
-  background: var(--brand-primary);
-  transition: transform var(--motion-button) var(--ease-motion-standard);
-}
-
-.nav-link:hover::after,
-.nav-link[aria-current="page"]::after {
-  transform: scaleX(1);
-}
-
-/* Real scroll reveal: elements animate as they enter the viewport. */
-@supports (animation-timeline: view()) {
-  main > section:not(:first-child),
-  main .interactive-card,
-  main .interactive-surface {
-    animation-name: scroll-reveal;
-    animation-duration: 1ms;
-    animation-timing-function: var(--ease-motion-enter);
-    animation-fill-mode: both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 34%;
-  }
-
-  main .interactive-card:nth-child(2),
-  main .interactive-surface:nth-child(2) {
-    animation-range: entry 0% cover 30%;
-  }
-
-  main .interactive-card:nth-child(3),
-  main .interactive-surface:nth-child(3) {
-    animation-range: entry 0% cover 26%;
-  }
-
-  main .interactive-card:nth-child(4),
-  main .interactive-surface:nth-child(4) {
-    animation-range: entry 0% cover 22%;
-  }
-}
-
-@supports not (animation-timeline: view()) {
-  main > section:not(:first-child) {
-    animation: page-section-enter 520ms var(--ease-motion-enter) both;
-  }
-}
-
-.scroll-reveal-fast { --reveal-distance: 12px; }
-.scroll-reveal { --reveal-distance: 22px; }
-.scroll-reveal-slow { --reveal-distance: 34px; }
-
-.section-shell {
-  position: relative;
-  isolation: isolate;
-}
-
-.section-shell::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(circle at top right, rgba(227,38,46,.035), transparent 28%);
-}
-
-.metric-card {
-  background: linear-gradient(145deg, #fff, var(--surface-soft));
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-}
-
-.hero-grid > .absolute {
-  animation: ambient-pulse var(--motion-ambient) ease-in-out infinite alternate;
-  transform-origin: center;
-  will-change: transform, opacity;
-}
-
-.hero-grid > .absolute:nth-child(2) {
-  animation-delay: -3s;
-  animation-duration: 12s;
-}
-
-@keyframes page-section-enter {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scroll-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(28px) scale(.985);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes ambient-pulse {
-  from {
-    transform: scale(.98) translate3d(0, 0, 0);
-    opacity: .72;
-  }
-  to {
-    transform: scale(1.04) translate3d(10px, -8px, 0);
-    opacity: .92;
-  }
-}
+.hero-grid > .absolute { animation: ambient-pulse var(--motion-ambient) ease-in-out infinite alternate; transform-origin: center; will-change: transform, opacity; }
+.hero-grid > .absolute:nth-child(2) { animation-delay: -3s; animation-duration: 12s; }
+@keyframes ambient-pulse { from { transform: scale(.98) translate3d(0, 0, 0); opacity: .72; } to { transform: scale(1.04) translate3d(10px, -8px, 0); opacity: .92; } }
 
 @media (max-width: 768px) {
-  main > section {
-    animation-duration: 420ms;
-  }
+  .scroll-reveal { transform: translate3d(0, 22px, 0) scale(.99); transition-duration: 420ms; }
+  .interactive-surface:hover, .interactive-card:hover { transform: translateY(-1px); }
+  .interactive-card:hover img { transform: scale(1.015); }
+}
 
-  main > section:nth-child(n+4) {
-    animation-delay: 120ms;
-  }
-
-  .interactive-surface:hover,
-  .interactive-card:hover {
-    transform: translateY(-1px);
-  }
-
-  .interactive-card:hover img {
-    transform: scale(1.015);
-  }
-
-  @supports (animation-timeline: view()) {
-    main > section:not(:first-child),
-    main .interactive-card,
-    main .interactive-surface {
-      animation-duration: 1ms;
-      animation-range: entry 0% cover 28%;
-    }
-  }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .scroll-reveal, .scroll-reveal.is-visible { opacity: 1; transform: none; transition: none !important; }
+  .hero-grid > .absolute, .float, .float-delay { animation: none !important; }
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 1ms !important; animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
+  .interactive-surface:hover, .interactive-card:hover, .brand-cta:hover, .brand-cta:active { transform: none !important; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -274,32 +102,4 @@ main > section:nth-child(6) { animation-delay: 290ms; }
   .float-delay { animation: float 5s 1.2s ease-in-out infinite; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-
-  main > section,
-  .hero-grid > .absolute,
-  .float,
-  .float-delay {
-    animation: none !important;
-  }
-
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 1ms !important;
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-  }
-
-  .interactive-surface:hover,
-  .interactive-card:hover,
-  .brand-cta:hover,
-  .brand-cta:active {
-    transform: none !important;
-  }
-}
-
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
