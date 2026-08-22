@@ -143,6 +143,45 @@ main > section:nth-child(6) { animation-delay: 290ms; }
   transform: scaleX(1);
 }
 
+/* Real scroll reveal: elements animate as they enter the viewport. */
+@supports (animation-timeline: view()) {
+  main > section:not(:first-child),
+  main .interactive-card,
+  main .interactive-surface {
+    animation-name: scroll-reveal;
+    animation-duration: 1ms;
+    animation-timing-function: var(--ease-motion-enter);
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 34%;
+  }
+
+  main .interactive-card:nth-child(2),
+  main .interactive-surface:nth-child(2) {
+    animation-range: entry 0% cover 30%;
+  }
+
+  main .interactive-card:nth-child(3),
+  main .interactive-surface:nth-child(3) {
+    animation-range: entry 0% cover 26%;
+  }
+
+  main .interactive-card:nth-child(4),
+  main .interactive-surface:nth-child(4) {
+    animation-range: entry 0% cover 22%;
+  }
+}
+
+@supports not (animation-timeline: view()) {
+  main > section:not(:first-child) {
+    animation: page-section-enter 520ms var(--ease-motion-enter) both;
+  }
+}
+
+.scroll-reveal-fast { --reveal-distance: 12px; }
+.scroll-reveal { --reveal-distance: 22px; }
+.scroll-reveal-slow { --reveal-distance: 34px; }
+
 .section-shell {
   position: relative;
   isolation: isolate;
@@ -175,13 +214,19 @@ main > section:nth-child(6) { animation-delay: 290ms; }
 }
 
 @keyframes page-section-enter {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scroll-reveal {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(28px) scale(.985);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -212,6 +257,15 @@ main > section:nth-child(6) { animation-delay: 290ms; }
 
   .interactive-card:hover img {
     transform: scale(1.015);
+  }
+
+  @supports (animation-timeline: view()) {
+    main > section:not(:first-child),
+    main .interactive-card,
+    main .interactive-surface {
+      animation-duration: 1ms;
+      animation-range: entry 0% cover 28%;
+    }
   }
 }
 
