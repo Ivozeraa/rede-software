@@ -2,48 +2,65 @@ const REVEAL_SELECTOR = 'main > section, main .interactive-card, main .interacti
 const REVEAL_CLASS = 'scroll-reveal'
 const VISIBLE_CLASS = 'is-visible'
 
-function revealElement(element: Element, index: number) {
-  if (!(element instanceof HTMLElement)) return
-  if (element.classList.contains(REVEAL_CLASS)) return
-  element.classList.add(REVEAL_CLASS)
-  element.style.setProperty('--reveal-delay', `${Math.min(index * 45, 240)}ms`)
-}
-
-function observeRevealElements() {
-  const elements = Array.from(document.querySelectorAll(REVEAL_SELECTOR))
-  elements.forEach((element, index) => revealElement(element, index))
-
-  const revealObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return
-      entry.target.classList.add(VISIBLE_CLASS)
-      observer.unobserve(entry.target)
-    })
-  }, {
-    threshold: 0.12,
-    rootMargin: '0px 0px -8% 0px',
-  })
-
-  document.querySelectorAll(`.${REVEAL_CLASS}:not(.${VISIBLE_CLASS})`).forEach((element) => revealObserver.observe(element))
-  return () => revealObserver.disconnect()
-}
-
-let cleanup: (() => void) | undefined
 let frame = 0
+let mutationFrame = 0
 
-function refresh() {
-  cancelAnimationFrame(frame)
-  frame = requestAnimationFrame(() => {
-    cleanup?.()
-    cleanup = observeRevealElements()
+function collectElements() {
+  return Array.from(document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR))
+}
+
+function prepareElements() {
+  collectElements().forEach((element, index) => {
+    if (!element.classList.contains(REVEAL_CLASS)) {
+      element.classList.add(REVEAL_CLASS)
+      element.style.setProperty('--reveal-delay', `${Math.min(index * 35, 210)}ms`)
+    }
   })
 }
 
-const mutationObserver = new MutationObserver(refresh)
+function updateVisibility() {
+  frame = 0
+  const triggerLine = window.innerHeight * 0.88
+
+  collectElements().forEach((element) => {
+    if (element.classList.contains(VISIBLE_CLASS)) return
+
+    const rect = element.getBoundingClientRect()
+    if (rect.top <= triggerLine && rect.bottom >= 0) {
+      element.classList.add(VISIBLE_CLASS)
+    }
+  })
+}
+
+function requestVisibilityUpdate() {
+  if (frame) return
+  frame = requestAnimationFrame(updateVisibility)
+}
+
+function refreshAfterMutation() {
+  if (mutationFrame) return
+  mutationFrame = requestAnimationFrame(() => {
+    mutationFrame = 0
+    prepareElements()
+    requestVisibilityUpdate()
+  })
+}
 
 function start() {
-  refresh()
-  mutationObserver.observe(document.body, { childList: true, subtree: true })
+  prepareElements()
+  requestVisibilityUpdate()
+
+  window.addEventListener('scroll', requestVisibilityUpdate, { passive: true })
+  window.addEventListener('resize', requestVisibilityUpdate, { passive: true })
+
+  const observer = new MutationObserver(refreshAfterMutation)
+  observer.observe(document.body, { childList: true, subtree: true })
+
+  window.addEventListener('beforeunload', () => {
+    observer.disconnect()
+    window.removeEventListener('scroll', requestVisibilityUpdate)
+    window.removeEventListener('resize', requestVisibilityUpdate)
+  }, { once: true })
 }
 
 if (document.readyState === 'loading') {
