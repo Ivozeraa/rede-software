@@ -28,9 +28,17 @@
   --focus-ring: #e3262e;
   --content-max: 1280px;
   --radius-card: 24px;
-  --radius-control: 12px;
-  --motion-fast: 150ms;
-  --motion-base: 200ms;
+
+  /* LottieFiles motion system — Corporate / Professional */
+  --motion-micro: 120ms;
+  --motion-button: 160ms;
+  --motion-icon: 200ms;
+  --motion-card: 280ms;
+  --motion-page: 520ms;
+  --motion-ambient: 9000ms;
+  --ease-motion-enter: cubic-bezier(0.2, 0, 0, 1);
+  --ease-motion-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --ease-motion-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
@@ -51,21 +59,62 @@ img { max-width: 100%; }
 .dashboard-shadow { box-shadow: 0 30px 80px rgba(16,17,20,.11), 0 8px 24px rgba(16,17,20,.05); }
 .soft-shadow { box-shadow: 0 18px 52px rgba(16,17,20,.07); }
 
-/* UI/UX Pro Max interaction layer */
-.interactive-surface, .interactive-card { transition: transform var(--motion-base) ease, box-shadow var(--motion-base) ease, border-color var(--motion-base) ease, background-color var(--motion-base) ease; }
-.interactive-surface:hover, .interactive-card:hover { transform: translateY(-2px); box-shadow: 0 20px 56px rgba(16,17,20,.09); border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border)); }
-.brand-cta { transition: background-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease, transform var(--motion-fast) ease; }
-.brand-cta:hover { background-color: var(--brand-primary-hover); box-shadow: 0 12px 30px rgba(227,38,46,.18); transform: translateY(-1px); }
-.brand-cta:active { background-color: var(--brand-primary-deep); transform: translateY(0); }
+/* Motion foundation */
+main { animation: page-enter var(--motion-page) var(--ease-motion-enter) both; }
+main > section { animation: section-enter var(--motion-card) var(--ease-motion-enter) both; }
+main > section:nth-child(1) { animation-delay: 40ms; }
+main > section:nth-child(2) { animation-delay: 90ms; }
+main > section:nth-child(3) { animation-delay: 140ms; }
+main > section:nth-child(4) { animation-delay: 190ms; }
+main > section:nth-child(5) { animation-delay: 240ms; }
+main > section:nth-child(6) { animation-delay: 290ms; }
+main > section:nth-child(7) { animation-delay: 320ms; }
 
-.nav-link { position: relative; transition: color var(--motion-fast) ease; }
-.nav-link::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 5px; height: 2px; transform: scaleX(0); transform-origin: left; background: var(--brand-primary); transition: transform var(--motion-fast) ease; }
+/* UI/UX Pro Max interaction layer + motion design */
+.interactive-surface, .interactive-card { transition: transform var(--motion-card) var(--ease-motion-standard), box-shadow var(--motion-card) var(--ease-motion-standard), border-color var(--motion-card) var(--ease-motion-standard), background-color var(--motion-card) var(--ease-motion-standard); will-change: transform; }
+.interactive-surface:hover, .interactive-card:hover { transform: translateY(-3px); box-shadow: 0 20px 56px rgba(16,17,20,.09); border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border)); }
+.interactive-card img { transition: transform var(--motion-card) var(--ease-motion-standard); }
+.interactive-card:hover img { transform: scale(1.015); }
+.brand-cta { transition: background-color var(--motion-button) var(--ease-motion-standard), box-shadow var(--motion-button) var(--ease-motion-standard), transform var(--motion-button) var(--ease-motion-standard); will-change: transform; }
+.brand-cta:hover { background-color: var(--brand-primary-hover); box-shadow: 0 12px 30px rgba(227,38,46,.18); transform: translateY(-1px); }
+.brand-cta:active { background-color: var(--brand-primary-deep); transform: translateY(0) scale(.985); }
+
+.nav-link { position: relative; transition: color var(--motion-micro) var(--ease-motion-standard); }
+.nav-link::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 5px; height: 2px; transform: scaleX(0); transform-origin: left; background: var(--brand-primary); transition: transform var(--motion-micro) var(--ease-motion-enter); }
 .nav-link:hover::after, .nav-link[aria-current="page"]::after { transform: scaleX(1); }
 
 .section-shell { position: relative; isolation: isolate; }
 .section-shell::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(circle at top right, rgba(227,38,46,.035), transparent 28%); }
 .metric-card { background: linear-gradient(145deg, #fff, var(--surface-soft)); border: 1px solid var(--border); border-radius: var(--radius-card); }
 
-@media (prefers-reduced-motion: no-preference) { .float { animation: float 5s ease-in-out infinite; } .float-delay { animation: float 5s 1.2s ease-in-out infinite; } }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; } }
-@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+/* Ambient motion is deliberately slow and subordinate to content. */
+.hero-grid > .absolute:nth-child(1) { animation: ambient-breathe var(--motion-ambient) ease-in-out infinite; transform-origin: center; }
+.hero-grid > .absolute:nth-child(2) { animation: ambient-breathe 11s 1.2s ease-in-out infinite reverse; transform-origin: center; }
+
+@media (max-width: 1023px) {
+  main > section:nth-child(n) { animation-delay: 30ms; }
+  main > section:nth-child(n+4) { animation-delay: 50ms; }
+  .interactive-surface:hover, .interactive-card:hover { transform: translateY(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  main, main > section, .hero-grid > .absolute, .float, .float-delay { animation: none !important; }
+  .interactive-surface, .interactive-card, .interactive-card img, .brand-cta, .nav-link { transition-duration: 1ms !important; }
+  .interactive-surface:hover, .interactive-card:hover, .brand-cta:hover, .interactive-card:hover img { transform: none !important; box-shadow: none !important; }
+}
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes section-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ambient-breathe {
+  0%, 100% { opacity: .72; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.035); }
+}
