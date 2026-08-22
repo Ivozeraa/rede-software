@@ -1,0 +1,1 @@
+Image assets are committed through the repository's Git object database and are referenced locally by the site.
